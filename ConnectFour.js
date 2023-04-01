@@ -1,55 +1,106 @@
-let board = fillBoard; //board is a 2D array
-game(board) //start the game
+function fillBoard() {//fills array with blank spaces
+    let boardArr = new Array(6);
+    for (let i = 0; i < boardArr.length; i++) {
+        boardArr[i] = new Array(7).fill(" ");
+    }
+    return boardArr;
+}
 
-const fillBoard = () => { //fills board with empty spaces
-	const board = new Array(6);
-	for (let i = 0; i < 6; i++) {
-  		board[i] = new board(7).fill(" ");
-	}
+const printBoard = (board) => { //print board for console
+    console.log("\n 1   2   3   4   5   6   7\n---------------------------");
+    for(let i = 0; i < board.length; i++){
+        let row = "";
+        for (let j = 0; j < board[0].length; j++){
+            row += " " + board[i][j] + " |";
+        }
+        console.log(row);
+        console.log("---------------------------");
+    }
+}
+
+const placeMove = (board, symbol, move, checkers) => {
+	board[board.length-checkers[move] - 1][move] = symbol;
+	checkers[move]++;
 	return board;
 }
 
-const printBoard = (board) => { 
+const victoryCheck = (board, symbol, checkers, move) => { 
+    let c1=false,c2=false,r=false,dR1=false,dR2=false,dL1=false,dL2=false
+    let height = board.length-1;
+    let length = board[0].length-1;
+    let i = height - checkers[move]+1;
 
-	console.log("\n 1   2   3   4   5   6   7\n---------------------------");
-	for(let i = 0; i < board.length; i++){
-		for (let j = 0; j < board[0].length; j++){
-			console.log(" " + board[i][j] + " |");
-		}
-		console.log("\n---------------------------");
-	}
+    let row = 1, column = 1, diagonalRight = 1, diagonalLeft = 1;
+    for(let j = 1; j < 4 && !(c1&&c2&&r&&dR1&&dR2&&dL1&&dL2); j++){
+
+        //counts columns
+        if(!c1 && move + j <= length && board[i][move + j] === symbol){ //to right
+            column++;
+        }else{
+            c1 = true;//stops counting once streak ends
+        }
+        if(!c2 && move - j >= 0 && board[i][move - j] === symbol){ //to left
+            column++;
+        }else{
+            c2 = true;
+        }
+
+        //counts rows
+
+        if(!r && i + j <= height && board[i + j][move] === symbol){ //down
+            row++;
+        }else{
+            r = true;
+        }
+
+        //counts diagonals
+        if(!dR1 && move + j <= length && i + j <= height && board[i + j][move + j] === symbol){ //to top right
+            diagonalRight++;
+        }else{
+            dR1 = true;
+        }
+        if(!dR2 && move - j >= 0 && i - j >= 0 && board[i-j][move-j] === symbol){ //to bottom left
+            diagonalRight++;
+        }else{
+            dR2 = true;
+        }
+        if(!dL1 && move - j >= 0 && i + j <= height && board[i+j][move-j] === symbol){ //to top left
+            diagonalLeft++;
+        }else{
+            dL1 = true;
+        }
+        if(!dL2 && move + j <= length && i - j >= 0 && board[i - j][move + j] === symbol){ //to bottom right
+            diagonalLeft++;
+        }else{
+            dL2 = true;
+        }
+    }
+    console.log("Row: " + row + "\nColumn: " + column + "\nRight Diagonal: " + diagonalRight + "\nLeft Diagonal: " + diagonalLeft);//used for debugging purposes
+    return (row >= 4 || column >= 4 || diagonalRight >= 4 || diagonalLeft >= 4);
 }
 
 const game = (board) => {
-	const player1 = true;
-	const symbol;
-	const turn = 1;
+	let player1 = true;
+	let turn = 1;
 	const checkers = [0,0,0,0,0,0,0]; //keeps track of how high the checkers are stacked in a column
-	let moveP;
-
+	let move;
+	const prompt = require('prompt-sync')();
 	while(turn != 43){ //game loop
-
-		if(player1){ 
-			symbol = 'O';
-		} else {
-			symbol = 'X';
-		}
-
+		let symbol = player1 ? 'O' : 'X'; //if player1 is(?) true(O):false(X) (ternary operator)
 		printBoard(board);
 
-		while(true){
-			let move = prompt("Choose a column you would like to make a move in");
-			move = parseInt(move)--;
-			if(move > 6 || move < 0 || checkers[move] >= 6){
-				console.log("Invalid move, please try again");
-				continue;
-			}
-			moveP = move; //is moveP redundant?
-			board = placeMove(board, symbol, move, checkers);
-			break;
+		while (true) {
+		  move = prompt("Choose a column you would like to make a move in");
+		  move = parseInt(move)-1; // subtract 1 to make it zero-indexed
+		  if (move > 6 || move < 0 || checkers[move] >= 6) {
+		    console.log("Invalid move, please try again");
+		  } else {
+		    board = placeMove(board, symbol, move, checkers);
+		    break;
+		  }
 		}
 		
-		if(victoryCheck(board, symbol, checkers, moveP)){
+		if(victoryCheck(board, symbol, checkers, move)){
 			break;
 		}
 		player1 = !player1; //switches player to opposite condition
@@ -59,7 +110,7 @@ const game = (board) => {
 	printBoard(board);
 
 	if(turn == 43)
-		console.log("player 1 and 2 tied");
+		console.log("Player 1 and Player 2 tied");
 	else {
 		let win = 1; //used to refer to player 1 or 2
 		if(!player1)
@@ -68,97 +119,5 @@ const game = (board) => {
 	}
 	process.exit(0);
 }
-
-const placeMove = (board, symbol, move, checkers) => {
-	board[board.length-checkers[move] - 1][move] = symbol;
-	checkers[move]++;
-	return board;
-}
-
-const victoryCheck = (board, symbol, checkers, move) => { //checks to see if a player won
-	const pause = new Array(8);
-	let height = board.length-1;
-	let length = board[0].length-1;
-	let i = height - checkers[move] + 1;
-	let row = 1, col = 1, diagR = 1, diagL = 1;
-		for(let j = 1; j < board.[0].length; j++){
-			if(pause[0] && pause[1] && pause[2] && pause[3] && pause[4] && pause[5] && pause[6] && pause[7])
-					break;
-			console.log(j);
-
-			//counts rows
-			if(!pause[0] && move + j <= length && board[i][move + j].equals(symbol)){ //to right
-				row++;
-			}else{
-				pause[0] = true;//stops counting once streak ends
-			}
-			if(!pause[1] && move - j >= 0 && board[i][move - j].equals(symbol)){ //to left
-				row++;
-			}else{
-				pause[1] = true;
-			}
-
-			//counts columns
-			if(!pause[2] && i + j <= height && board[i + j][move].equals(symbol)){ //up
-				col++;
-			}else{
-				pause[2] = true;
-			}
-			if(!pause[3] && i - j >= 0 && board[i - j][move].equals(symbol)){ //down
-				col++;
-			}else{
-				pause[3] = true;
-			}
-
-			//counts diagonals
-			if(!pause[4] && move + j <= length && i + j <= height && board[i + j][move + j].equals(symbol)){ //to top right
-				diagR++;
-			}else{
-				pause[4] = true;
-			}
-			if(!pause[5] && i - j >= 0 && move - j >= 0 && board[i-j][move-j].equals(symbol)){ //to bottom left
-				diagL++;
-			}else{
-				pause[5] = true;
-			}
-			if(!pause[6] && move - j >= 0 && i + j <= height && board[i+j][move-j].equals(symbol)){ //to top left
-				diagL++;
-			}else{
-				pause[6] = true;
-			}
-			if(!pause[7] && move + j <= length && i - j >= 0 && board[i - j][move + j].equals(symbol)){ //to bottom right
-				diagR++;
-			}else{
-				pause[7] = true;
-			}
-		}
-
-	if(row >= 4 || col >= 4 || diagR >= 4 || diagL >= 4)//this needs to be inside nested loop
-			return true;
-	return false;
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	
+let board = fillBoard(); //board is a 2D array
+game(board) //start the game

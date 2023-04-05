@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 
 
-const Chip = (columnIndex, value, placeMove) => {
+const Chip = ({ columnIndex, value, placeMove }) => {
 
     const [color, setColor] = useState('white');
     

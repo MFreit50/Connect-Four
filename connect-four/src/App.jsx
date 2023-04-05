@@ -105,9 +105,7 @@ function App() {
         <thead>
         </thead>
         <tbody>
-          {state.board.map((row, id) => (
-            <BoardRow row={row} placeMove={placeMove} key={id}/>
-          ))}
+          {state.board.map((row, id) => (<BoardRow row={row} placeMove={placeMove} key={id}/>))}
         </tbody>
       </table>
     </div>

@@ -4,54 +4,101 @@ import BoardRow from './components/BoardRow';
 
 function App() {
 
-  const board = fillBoard();
-  const [boardState, setBoardState] = useState(board);
-
-  const game = {
+  const [game, setGame] = useState({
     symbol: true,
     chipStack: [0,0,0,0,0,0,0],
     turn: 0
-  }
-  
+  });
+
+  const [board, setBoard] = useState(() => fillBoard());
 
   function fillBoard() {
     console.log("fill board"); //testing
     let boardArr = new Array(6);
     for (let i = 0; i < boardArr.length; i++) {
-        boardArr[i] = new Array(7).fill(' ');
+      boardArr[i] = new Array(7).fill(' ');
     }
     return boardArr;
   }
 
+  /*
   const placeMove = (columnNum) => {
     console.log("place move at ", columnNum);
-    if(game.turn !== 43 && game.chipStack[columnNum] < 6) { //consider the move only if the column height has not been reached
-      board[board.length - game.chipStack[columnNum] - 1][columnNum] = game.symbol;
-      game.chipStack[columnNum]++;
-      if(victoryCheck(columnNum)) {
-        gameResult();
-      }   
-      game.symbol = !game.symbol;
-      game.turn++;
-    }
+    if (game.turn !== 43 && game.chipStack[columnNum] < 6) { //consider the move only if the column height has not been reached
+      let newBoard = [...board];
+      newBoard[board.length - game.chipStack[columnNum] - 1][columnNum] = game.symbol;
+      setBoard(newBoard);
 
-    if(game.turn === 43) {
+      setGame(prevGame => {
+        let newGame = {...prevGame};
+        newGame.chipStack[columnNum]++;
+        console.log("chipStack", newGame.chipStack[columnNum]);
+        if (victoryCheck(columnNum)) {
+          gameResult();
+        }
+        newGame.symbol = !prevGame.symbol;
+        newGame.turn++;
+        return newGame;
+      });
+    }    
+
+    if (game.turn === 43) {
       initiateTie();
     }
-
+    console.log("CHIPSTACK", game.chipStack);
     console.log("BOARD", board);
-    console.log("TURN", game.turn);
-
-    setBoardState(board);
+    console.log("TUR", game.turn);
   }
+  */
+
+  const placeMove = (columnNum) => {
+    console.log("place move at ", columnNum);
+    if(game.turn !== 43 && game.chipStack[columnNum] < 6) {
+      let newBoard = [...board];
+      newBoard[newBoard.length - game.chipStack[columnNum] - 1][columnNum] = game.symbol;
+  
+      let newChipStack = [...game.chipStack];
+      let newGameTurn = game.turn;
+      newChipStack[columnNum]++;
+      newGameTurn++;
+  
+      setBoard(newBoard);
+      setGame(prevState => ({
+        ...prevState,
+        chipStack: newChipStack,
+        symbol: !game.symbol,
+        turn: newGameTurn
+      }), () => {
+        if(victoryCheck(columnNum)) {
+          gameResult();
+        }   
+  
+        if(game.turn === 42) {
+          initiateTie();
+        }
+  
+        console.log("BOARD", board);
+        console.log("TURN", game.turn);
+        console.log("CHIP STACK", newChipStack);
+      });
+    }
+  }
+
+
+  
+
+
 
   const victoryCheck = (columnNum) => { 
     console.log("victory check"); //testing
     console.log("COLUMN NUM IS: ", columnNum);
     let c1=false,c2=false,r=false,dR1=false,dR2=false,dL1=false,dL2=false
     let height = board.length-1;
+    console.log("HEIGHT", height);
     let length = board[0].length-1;
+    console.log("LENGTH" , length);
     let i = height - game.chipStack[columnNum]+1;
+    console.log("i", i);
 
     let row = 1, column = 1, diagonalRight = 1, diagonalLeft = 1;
     for(let j = 1; j < 4 && !(c1&&c2&&r&&dR1&&dR2&&dL1&&dL2); j++){
@@ -106,7 +153,7 @@ function App() {
         <thead>
         </thead>
         <tbody>
-           {boardState && boardState.map((row, id) => (<BoardRow row={row} placeMove={placeMove} key={id}/>))}
+           {board && board.map((row, id) => (<BoardRow row={row} placeMove={placeMove} key={id}/>))}
         </tbody>
       </table>
     </div>

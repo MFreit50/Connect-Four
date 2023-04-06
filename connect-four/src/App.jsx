@@ -11,12 +11,27 @@ function App() {
   });
 
   const [board, setBoard] = useState(() => fillBoard());
+  const [column, setColumn] = useState();
+
+  useEffect(() => {
+    advanceGame();
+  }, [column, board, game.turn])  
+
+  function advanceGame() {
+    //this needs to be called independently from setGame and setBoard
+    if(victoryCheck(column) === true) {
+      gameResult();
+    }   
+
+    if(game.turn === 42) {
+      initiateTie();
+    }
+  }
 
   function fillBoard() {
-    console.log("fill board"); //testing
     let boardArr = new Array(6);
     for (let i = 0; i < boardArr.length; i++) {
-      boardArr[i] = new Array(7).fill(' ');
+      boardArr[i] = new Array(7).fill(null);
     }
     return boardArr;
   }
@@ -62,46 +77,29 @@ function App() {
       newChipStack[columnNum]++;
       newGameTurn++;
   
+      setColumn(columnNum);      
       setBoard(newBoard);
-      setGame(prevState => ({
-        ...prevState,
+      setGame({
+        ...game,
         chipStack: newChipStack,
         symbol: !game.symbol,
         turn: newGameTurn
-      }), () => {
-        if(victoryCheck(columnNum)) {
-          gameResult();
-        }   
-  
-        if(game.turn === 42) {
-          initiateTie();
-        }
-  
-        console.log("BOARD", board);
-        console.log("TURN", game.turn);
-        console.log("CHIP STACK", newChipStack);
       });
     }
   }
 
-
-  
-
-
-
   const victoryCheck = (columnNum) => { 
-    console.log("victory check"); //testing
-    console.log("COLUMN NUM IS: ", columnNum);
+    console.log("board", board);
     let c1=false,c2=false,r=false,dR1=false,dR2=false,dL1=false,dL2=false
     let height = board.length-1;
-    console.log("HEIGHT", height);
     let length = board[0].length-1;
-    console.log("LENGTH" , length);
-    let i = height - game.chipStack[columnNum]+1;
-    console.log("i", i);
+    let i = height - game.chipStack[columnNum]+1;;
+    
 
     let row = 1, column = 1, diagonalRight = 1, diagonalLeft = 1;
     for(let j = 1; j < 4 && !(c1&&c2&&r&&dR1&&dR2&&dL1&&dL2); j++){
+      console.log("i is ", i);
+      console.log("j is ", j);
         //counts columns
         if(!c1 && columnNum + j <= length && board[i][columnNum + j] === game.symbol){ //to right
             column++;
@@ -144,6 +142,9 @@ function App() {
         }
     }
     console.log("Row: " + row + "\nColumn: " + column + "\nRight Diagonal: " + diagonalRight + "\nLeft Diagonal: " + diagonalLeft);//used for debugging purposes
+    console.log("victory check"); //testing
+    console.log("columnNum", columnNum);
+    console.log("board2", board);
     return (row >= 4 || column >= 4 || diagonalRight >= 4 || diagonalLeft >= 4);
   }
 

@@ -1,32 +1,30 @@
 import { useState, useEffect } from 'react';
 
 
-const Chip = ({ columnIndex, value, placeMove, symbol }) => {
+const Chip = ({ columnIndex, value, placeMove}) => {
 
     const [color, setColor] = useState('white');
-    
-    const makeMove = (columnIndex) => {
-        placeMove(columnIndex);
-        determineColor();
-    }
 
     const determineColor = () => {
-        //value === true ? 'yellow' : value === false ? 'blue' : 'white'
-        if(symbol === true) {
+        return value === true ? 'yellow' : value === false ? 'blue' : 'white';
+
+
+        /*
+        if(value === true) {
             setColor('yellow');
-        } else if(symbol === false) {
+        } else if(value === false) {
             setColor('blue');
+        } else {
+            setColor('white');
         }
         return color
+        */
     }
-    
-        
-    
 
     return(
         <td>
-            <div className="chip" onClick={() => makeMove(columnIndex)}>
-                <div className={color}>test</div>
+            <div className="chip" onClick={() => placeMove(columnIndex)}>
+                <div className={determineColor()}>test</div>
             </div>
         </td>
     );

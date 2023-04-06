@@ -3,19 +3,20 @@ import './App.css'
 import BoardRow from './components/BoardRow';
 
 function App() {
-  const [state, setState] = useState(
-    {
-      board: fillBoard(), //replace this with fillBoard() later
-      symbol: true, //keeps track of whose turn it is
-      chipStack: [0,0,0,0,0,0,0], //keeps track of how high the chipStack are stacked in a column
-      turn: 0
-    })
 
-  function fillBoard() {//fills array with blank spaces
-    console.log("fill board");
+  const [state, setState] = useState({
+    board: fillBoard(),
+    symbol: true,
+    chipStack: [0,0,0,0,0,0,0],
+    turn: 0
+  });
+  
+
+  function fillBoard() {
+    console.log("fill board"); //testing
     let boardArr = new Array(6);
     for (let i = 0; i < boardArr.length; i++) {
-        boardArr[i] = new Array(7).fill(null);
+        boardArr[i] = new Array(7).fill(' ');
     }
     return boardArr;
   }
@@ -23,24 +24,45 @@ function App() {
   const placeMove = (columnNum) => {
     console.log("place move at ", columnNum);
     if(state.turn !== 43 && state.chipStack[columnNum] < 6) { //consider the move only if the column height has not been reached
-      state.board[state.board.length - state.chipStack[columnNum] - 1][columnNum] = state.symbol;
-      state.chipStack[columnNum]++;
-      if(victoryCheck(columnNum)) {
-        gameResult()
-      }   
-      state.symbol = !state.symbol;
-      state.turn++;
+
+      const updatedBoard = [...state.board]; // create a copy of the board array
+      updatedBoard[state.board.length - state.chipStack[columnNum] - 1][columnNum] = state.symbol; // update the board array copy
+
+      const updatedChipStack = [...state.chipStack]; // create a copy of the chipStack array
+      updatedChipStack[columnNum] = updatedChipStack[columnNum] + 1; // update the chipStack array copy
+      console.log("UPDATED CHIPSTACK", updatedChipStack);
+
+      setState({ // update the state object with the new values
+        ...state,
+        board: updatedBoard,
+        chipStack: updatedChipStack
+      });
+
+      if(victoryCheck(columnNum)){
+        gameResult();
+      }
+
+      setState({
+        ...state,
+        symbol: !state.symbol,
+        turn: state.turn + 1
+      });
+      
+      console.log("Incremented State Turn", state.turn);
     }
 
     if(state.turn === 43) {
       initiateTie();
     }
+
+    //testing
     console.log("BOARD", state.board);
     console.log("TURN", state.turn);
   }
 
   const victoryCheck = (columnNum) => { 
-    console.log("victory check");
+    console.log("victory check"); //testing
+    console.log("COLUMN NUM IS: ", columnNum);
     let c1=false,c2=false,r=false,dR1=false,dR2=false,dL1=false,dL2=false
     let height = state.board.length-1;
     let length = state.board[0].length-1;
@@ -48,7 +70,6 @@ function App() {
 
     let row = 1, column = 1, diagonalRight = 1, diagonalLeft = 1;
     for(let j = 1; j < 4 && !(c1&&c2&&r&&dR1&&dR2&&dL1&&dL2); j++){
-
         //counts columns
         if(!c1 && columnNum + j <= length && state.board[i][columnNum + j] === state.symbol){ //to right
             column++;
@@ -100,7 +121,7 @@ function App() {
         <thead>
         </thead>
         <tbody>
-           {state.board.map((row, id) => (<BoardRow row={row} placeMove={placeMove} symbol={state.symbol} key={id}/>))}
+           {state.board.map((row, id) => (<BoardRow row={row} placeMove={placeMove} key={id}/>))}
         </tbody>
       </table>
     </div>

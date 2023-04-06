@@ -70,7 +70,7 @@ function App() {
     console.log("place move at ", columnNum);
     if(game.turn !== 43 && game.chipStack[columnNum] < 6) {
       let newBoard = [...board];
-      newBoard[newBoard.length - game.chipStack[columnNum] - 1][columnNum] = game.symbol;
+      newBoard[newBoard.length - game.chipStack[columnNum] - 1][columnNum] = !game.symbol;
   
       let newChipStack = [...game.chipStack];
       let newGameTurn = game.turn;
@@ -94,12 +94,13 @@ function App() {
     let height = board.length-1;
     let length = board[0].length-1;
     let i = height - game.chipStack[columnNum]+1;;
-    
 
     let row = 1, column = 1, diagonalRight = 1, diagonalLeft = 1;
     for(let j = 1; j < 4 && !(c1&&c2&&r&&dR1&&dR2&&dL1&&dL2); j++){
       console.log("i is ", i);
       console.log("j is ", j);
+      console.log("Game Symbol: " + game.symbol);
+      console.log("Columns 1 and 2: " + c1 + " " + c2 + "\nRow: " + r + "\nDiagonal Right 1 and 2: " + dR1 + " " + dR2 + "\nDiagonal Left 1 and 2: " + dL1 + " " + dL2);
         //counts columns
         if(!c1 && columnNum + j <= length && board[i][columnNum + j] === game.symbol){ //to right
             column++;

@@ -5,14 +5,7 @@ import BoardRow from './components/BoardRow';
 function App() {
   const [state, setState] = useState(
     {
-      board: [
-        [null, null, null, null, null, null, null],
-        [null, null, null, null, null, null, null],
-        [null, null, null, null, null, null, null],
-        [null, null, null, null, null, null, null],
-        [null, null, null, null, null, null, null],
-        [null, null, null, null, null, null, null]
-      ], //replace this with fillBoard() later
+      board: fillBoard(), //replace this with fillBoard() later
       symbol: true, //keeps track of whose turn it is
       chipStack: [0,0,0,0,0,0,0], //keeps track of how high the chipStack are stacked in a column
       turn: 0
@@ -28,10 +21,10 @@ function App() {
   }
 
   const placeMove = (columnNum) => {
-    console.log("place move");
-    if(state.turn != 43 && state.chipStack[columnNum] < 6) { //consider the move only if the column height has not been reached
+    console.log("place move at ", columnNum);
+    if(state.turn !== 43 && state.chipStack[columnNum] < 6) { //consider the move only if the column height has not been reached
       state.board[state.board.length - state.chipStack[columnNum] - 1][columnNum] = state.symbol;
-      state.board.chipStack[columnNum]++;
+      state.chipStack[columnNum]++;
       if(victoryCheck(columnNum)) {
         gameResult()
       }   
@@ -42,6 +35,8 @@ function App() {
     if(state.turn === 43) {
       initiateTie();
     }
+    console.log("BOARD", state.board);
+    console.log("TURN", state.turn);
   }
 
   const victoryCheck = (columnNum) => { 
@@ -105,7 +100,7 @@ function App() {
         <thead>
         </thead>
         <tbody>
-           {state.board.map((row, id) => (<tr key={id}><BoardRow row={row} placeMove={placeMove} key={id}/></tr>))}
+           {state.board.map((row, id) => (<BoardRow row={row} placeMove={placeMove} symbol={state.symbol} key={id}/>))}
         </tbody>
       </table>
     </div>

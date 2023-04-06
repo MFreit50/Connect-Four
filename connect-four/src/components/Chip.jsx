@@ -1,27 +1,31 @@
 import { useState, useEffect } from 'react';
 
 
-const Chip = ({ columnIndex, value, placeMove }) => {
+const Chip = ({ columnIndex, value, placeMove, symbol }) => {
 
     const [color, setColor] = useState('white');
     
-    /* this could cause a bug: is value a state?
-    useEffect(() => { //call determineColor only if value changes
+    const makeMove = (columnIndex) => {
+        placeMove(columnIndex);
         determineColor();
-    }, [value])
-    */
-    
+    }
+
     const determineColor = () => {
-        if(value) {
+        //value === true ? 'yellow' : value === false ? 'blue' : 'white'
+        if(symbol === true) {
             setColor('yellow');
-        } else {
+        } else if(symbol === false) {
             setColor('blue');
         }
-    };
+        return color
+    }
+    
+        
+    
 
     return(
         <td>
-            <div className="chip" onClick={() => placeMove(columnIndex)}>
+            <div className="chip" onClick={() => makeMove(columnIndex)}>
                 <div className={color}>test</div>
             </div>
         </td>

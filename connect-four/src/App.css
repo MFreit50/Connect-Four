@@ -4,11 +4,6 @@ table {
     margin: 0 auto;
     border-spacing: 0px 0px;
 }
-td {
-  width: 50px;
-  height: 50px;
-  display: flex;
-}
 
 .chip {
     display: flex;

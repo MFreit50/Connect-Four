@@ -3,7 +3,8 @@ import './App.css'
 import BoardRow from './components/BoardRow';
 
 function App() {
-
+  const [message, setMessage] = useState(''); //used to keep track of player
+  const [gameOver, setGameOver] = useState(false); //equals true when tie or win
   const [game, setGame] = useState({
     symbol: true,
     chipStack: [0,0,0,0,0,0,0],
@@ -19,12 +20,15 @@ function App() {
 
   function advanceGame() {
     //this needs to be called independently from setGame and setBoard
-    if(victoryCheck(column) === true) {
+    if(victoryCheck(column)) {
+      setGameOver(true);
       gameResult();
-    }   
 
-    if(game.turn === 42) {
+    }else if(game.turn === 42) {
+      setGameOver(true);
       initiateTie();
+    }else{
+      game.turn % 2 === 0 ? setMessage('Player 1 turn') : setMessage('Player 2 turn');
     }
   }
 
@@ -36,47 +40,50 @@ function App() {
     return boardArr;
   }
 
-  /*
-  const placeMove = (columnNum) => {
-    console.log("place move at ", columnNum);
-    if (game.turn !== 43 && game.chipStack[columnNum] < 6) { //consider the move only if the column height has not been reached
-      let newBoard = [...board];
-      newBoard[board.length - game.chipStack[columnNum] - 1][columnNum] = game.symbol;
-      setBoard(newBoard);
-
-      setGame(prevGame => {
-        let newGame = {...prevGame};
-        newGame.chipStack[columnNum]++;
-        console.log("chipStack", newGame.chipStack[columnNum]);
-        if (victoryCheck(columnNum)) {
-          gameResult();
-        }
-        newGame.symbol = !prevGame.symbol;
-        newGame.turn++;
-        return newGame;
-      });
-    }    
-
-    if (game.turn === 43) {
-      initiateTie();
+  function gameResult(){
+    if(game.symbol){
+      setMessage('Player 1 won');
+      console.log("Player 1 won");
+    }else{
+      setMessage('Player 2 won');
+      console.log("Player 2 won");
     }
-    console.log("CHIPSTACK", game.chipStack);
-    console.log("BOARD", board);
-    console.log("TUR", game.turn);
   }
-  */
+
+  function initiateTie(){
+    setMessage('It was a tie');
+    console.log("Player 1 and 2 Tied");
+  }
+
+  function resetGame() {
+    setMessage('');
+    setGameOver(false);
+    setGame({
+      symbol: true,
+      chipStack: [0,0,0,0,0,0,0],
+      turn: 0
+    });
+    setBoard(fillBoard());
+    setColumn();
+  }
+
 
   const placeMove = (columnNum) => {
+    /* uncomment this code to prevent players from playing when game is over
+    if(gameOver){
+      return;
+    }
+    */
     console.log("place move at ", columnNum);
     if(game.turn !== 43 && game.chipStack[columnNum] < 6) {
       let newBoard = [...board];
       newBoard[newBoard.length - game.chipStack[columnNum] - 1][columnNum] = !game.symbol;
-  
+
       let newChipStack = [...game.chipStack];
       let newGameTurn = game.turn;
       newChipStack[columnNum]++;
       newGameTurn++;
-  
+
       setColumn(columnNum);      
       setBoard(newBoard);
       setGame({
@@ -151,6 +158,9 @@ function App() {
 
   return (
     <div className="App">
+      <h1>Connect Four</h1>
+      <p>{message}</p>
+      {gameOver && <button onClick={resetGame}>Play again</button>}
       <table className="section borders">
         <thead>
         </thead>
@@ -163,3 +173,32 @@ function App() {
 }
 
 export default App;
+  /*
+  const placeMove = (columnNum) => {
+    console.log("place move at ", columnNum);
+    if (game.turn !== 43 && game.chipStack[columnNum] < 6) { //consider the move only if the column height has not been reached
+      let newBoard = [...board];
+      newBoard[board.length - game.chipStack[columnNum] - 1][columnNum] = game.symbol;
+      setBoard(newBoard);
+
+      setGame(prevGame => {
+        let newGame = {...prevGame};
+        newGame.chipStack[columnNum]++;
+        console.log("chipStack", newGame.chipStack[columnNum]);
+        if (victoryCheck(columnNum)) {
+          gameResult();
+        }
+        newGame.symbol = !prevGame.symbol;
+        newGame.turn++;
+        return newGame;
+      });
+    }    
+
+    if (game.turn === 43) {
+      initiateTie();
+    }
+    console.log("CHIPSTACK", game.chipStack);
+    console.log("BOARD", board);
+    console.log("TUR", game.turn);
+  }
+  */

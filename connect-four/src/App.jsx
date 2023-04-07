@@ -165,7 +165,7 @@ function App() {
         <thead>
         </thead>
         <tbody>
-           {board && board.map((row, id) => (<BoardRow row={row} placeMove={placeMove} key={id}/>))}
+           {board && board.map((row, id) => (<BoardRow row={row} placeMove={placeMove} symbol={game.symbol} game={game} key={id}/>))}
         </tbody>
       </table>
     </div>

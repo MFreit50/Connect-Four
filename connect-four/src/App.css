@@ -12,21 +12,36 @@ table {
     align-items: center;
     cursor: pointer;
     gap: 20px;
-    height: 100px;
-    width: 100px;
+    height: 110px;
+    width: 125px;
     background-color: #1c4966;
 }
 
 .white {
-    background-color: gray;
+	width: 100px;
+	height: 100px;
+	border-radius: 50%;
+    background-color: white;
 }
 
 .yellow {
-    background-color: yellow;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background-color: rgb(255,213,1);
+	border: 12px solid rgb(242,203,5);
+	padding: 10px;
+	box-sizing: border-box;
 }
 
-.blue {
-    background-color: blue;
+.red {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background-color: rgb(255, 50, 1);
+	border: 12px solid rgb(220, 50, 0);
+	padding: 10px;
+	box-sizing: border-box;
 }
 /* Detailed Chips and board;
 .board {

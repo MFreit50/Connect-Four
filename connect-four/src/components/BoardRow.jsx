@@ -2,7 +2,7 @@ import { useState } from 'react';
 import Chip from './Chip';
 
 
-const BoardRow = ({ row, placeMove, symbol, game }) => {
+const BoardRow = ({ row, placeMove, game, winMessage }) => {
   return (
     <tr>
       {row.map((chip, i) => (
@@ -10,7 +10,7 @@ const BoardRow = ({ row, placeMove, symbol, game }) => {
           columnIndex={i}
           value={chip}
           placeMove={placeMove}
-          symbol={symbol}
+          winMessage={winMessage}
           game={game}
           key={i}
         />

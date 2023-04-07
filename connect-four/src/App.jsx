@@ -17,7 +17,7 @@ function App() {
 
   useEffect(() => {
     advanceGame();
-  }, [column, board, game.turn])  
+  }, [column, board])  
 
   function advanceGame() {
     //this needs to be called independently from setGame and setBoard
@@ -61,7 +61,7 @@ function App() {
     console.log("place move at ", columnNum);
     if(game.chipStack[columnNum] < 6 && game.turn !== 43 && winMessage.length === 0) {
       let newBoard = [...board];
-      newBoard[newBoard.length - game.chipStack[columnNum] - 1][columnNum] = !game.symbol;
+      newBoard[newBoard.length - game.chipStack[columnNum] - 1][columnNum] = !(game.turn%2==0);
 
       let newChipStack = [...game.chipStack];
       let newGameTurn = game.turn;
@@ -73,7 +73,6 @@ function App() {
       setGame({
         ...game,
         chipStack: newChipStack,
-        symbol: !game.symbol,
         turn: newGameTurn
       });
     }
@@ -84,50 +83,50 @@ function App() {
     let c1=false,c2=false,r=false,dR1=false,dR2=false,dL1=false,dL2=false
     let height = board.length-1;
     let length = board[0].length-1;
-    let i = height - game.chipStack[columnNum]+1;;
+    let i = height - game.chipStack[columnNum]+1;
+    let player = game.turn%2==0;
 
     let row = 1, column = 1, diagonalRight = 1, diagonalLeft = 1;
     for(let j = 1; j < 4 && !(c1&&c2&&r&&dR1&&dR2&&dL1&&dL2); j++){
       console.log("i is ", i);
       console.log("j is ", j);
-      console.log("Game Symbol: " + game.symbol);
       console.log("Columns 1 and 2: " + c1 + " " + c2 + "\nRow: " + r + "\nDiagonal Right 1 and 2: " + dR1 + " " + dR2 + "\nDiagonal Left 1 and 2: " + dL1 + " " + dL2);
         //counts columns
-        if(!c1 && columnNum + j <= length && board[i][columnNum + j] === game.symbol){ //to right
+        if(!c1 && columnNum + j <= length && board[i][columnNum + j] === player){ //to right
             column++;
         }else{
             c1 = true;//stops counting once streak ends
         }
-        if(!c2 && columnNum - j >= 0 && board[i][columnNum - j] === game.symbol){ //to left
+        if(!c2 && columnNum - j >= 0 && board[i][columnNum - j] === player){ //to left
             column++;
         }else{
             c2 = true;
         }
 
         //counts rows
-        if(!r && i + j <= height && board[i + j][columnNum] === game.symbol){ //down
+        if(!r && i + j <= height && board[i + j][columnNum] === player){ //down
             row++;
         }else{
             r = true;
         }
 
         //counts diagonals
-        if(!dR1 && columnNum + j <= length && i + j <= height && board[i + j][columnNum + j] === game.symbol){ //to top right
+        if(!dR1 && columnNum + j <= length && i + j <= height && board[i + j][columnNum + j] === player){ //to top right
             diagonalRight++;
         }else{
             dR1 = true;
         }
-        if(!dR2 && columnNum - j >= 0 && i - j >= 0 && board[i-j][columnNum-j] === game.symbol){ //to bottom left
+        if(!dR2 && columnNum - j >= 0 && i - j >= 0 && board[i-j][columnNum-j] === player){ //to bottom left
             diagonalRight++;
         }else{
             dR2 = true;
         }
-        if(!dL1 && columnNum - j >= 0 && i + j <= height && board[i+j][columnNum-j] === game.symbol){ //to top left
+        if(!dL1 && columnNum - j >= 0 && i + j <= height && board[i+j][columnNum-j] === player){ //to top left
             diagonalLeft++;
         }else{
             dL1 = true;
         }
-        if(!dL2 && columnNum + j <= length && i - j >= 0 && board[i - j][columnNum + j] === game.symbol){ //to bottom right
+        if(!dL2 && columnNum + j <= length && i - j >= 0 && board[i - j][columnNum + j] === player){ //to bottom right
             diagonalLeft++;
         }else{
             dL2 = true;
@@ -152,7 +151,7 @@ function App() {
         <thead>
         </thead>
         <tbody>
-           {board && board.map((row, id) => (<BoardRow row={row} placeMove={placeMove} symbol={game.symbol} game={game} key={id}/>))}
+           {board && board.map((row, id) => (<BoardRow row={row} placeMove={placeMove} winMessage={winMessage} game={game} key={id}/>))}
         </tbody>
       </table>
     </div>

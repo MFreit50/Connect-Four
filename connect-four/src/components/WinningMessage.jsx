@@ -13,11 +13,11 @@ const WinningMessage = ({winMessage, resetGame}) => {
             <div className="modal-background"></div>
             <div className="modal-content">
                 <div className="box is-centered">
-                <div class="columns is-flex is-flex-direction-column">
-                    <div class="column">
+                <div className="columns is-flex is-flex-direction-column">
+                    <div className="column">
                         <div className="block">{winMessage}</div>
                     </div>
-                    <div class="column">
+                    <div className="column">
                     <button className="button is-info" onClick={resetGame}>Play again</button>
                     </div>
                 </div>

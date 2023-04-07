@@ -1,10 +1,11 @@
 import { useState, useEffect} from 'react'
 import './App.css'
 import BoardRow from './components/BoardRow';
+import WinningMessage from './components/WinningMessage';
 
 function App() {
   const [message, setMessage] = useState(''); //used to keep track of player
-  const [gameOver, setGameOver] = useState(false); //equals true when tie or win
+  const [winMessage, setWinMessage] = useState('');
   const [game, setGame] = useState({
     symbol: true,
     chipStack: [0,0,0,0,0,0,0],
@@ -20,14 +21,9 @@ function App() {
 
   function advanceGame() {
     //this needs to be called independently from setGame and setBoard
-    if(victoryCheck(column)) {
-      setGameOver(true);
+    if(victoryCheck(column) || game.turn === 42) {
       gameResult();
-
-    }else if(game.turn === 42) {
-      setGameOver(true);
-      initiateTie();
-    }else{
+    } else {
       game.turn % 2 === 0 ? setMessage('Player 1 turn') : setMessage('Player 2 turn');
     }
   }
@@ -41,23 +37,16 @@ function App() {
   }
 
   function gameResult(){
-    if(game.symbol){
-      setMessage('Player 1 won');
-      console.log("Player 1 won");
+    if(game.turn >= 42){
+      setWinMessage('Tie');
     }else{
-      setMessage('Player 2 won');
-      console.log("Player 2 won");
+      setWinMessage(`${game.symbol ? 'Player 1' : 'Player 2'} won`);
     }
   }
 
-  function initiateTie(){
-    setMessage('It was a tie');
-    console.log("Player 1 and 2 Tied");
-  }
-
   function resetGame() {
+    setWinMessage('');
     setMessage('');
-    setGameOver(false);
     setGame({
       symbol: true,
       chipStack: [0,0,0,0,0,0,0],
@@ -69,13 +58,8 @@ function App() {
 
 
   const placeMove = (columnNum) => {
-    /* uncomment this code to prevent players from playing when game is over
-    if(gameOver){
-      return;
-    }
-    */
     console.log("place move at ", columnNum);
-    if(game.turn !== 43 && game.chipStack[columnNum] < 6) {
+    if(game.chipStack[columnNum] < 6 && game.turn !== 43 && winMessage.length === 0) {
       let newBoard = [...board];
       newBoard[newBoard.length - game.chipStack[columnNum] - 1][columnNum] = !game.symbol;
 
@@ -158,9 +142,12 @@ function App() {
 
   return (
     <div className="App">
-      <h1>Connect Four</h1>
-      <p>{message}</p>
-      {gameOver && <button onClick={resetGame}>Play again</button>}
+      {winMessage ? <WinningMessage winMessage={winMessage} resetGame={resetGame}/> : null }
+      <div className="section">
+        <h1 className="title is-1">Connect Four</h1>
+        <div className="subtitle is-5">{message}</div>
+      </div>
+      
       <table className="section borders">
         <thead>
         </thead>

@@ -5,28 +5,38 @@ table {
     border-spacing: 0px 0px;
 }
 
-.chip {
+.title, .subtitle, .box {    
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+}
+
+.box {
+    width: 200px;
+}
+
+.board {
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: center;
     cursor: pointer;
     gap: 20px;
-    height: 110px;
-    width: 125px;
-    background-color: #1c4966;
+    height: 90px;
+    width: 110px;
+    background-color: rgb(0,96,191);
 }
 
 .white {
-	width: 100px;
-	height: 100px;
+	width: 75px;
+	height: 75px;
 	border-radius: 50%;
     background-color: white;
 }
 
 .yellow {
-    width: 100px;
-    height: 100px;
+    width: 75px;
+    height: 75px;
     border-radius: 50%;
     background-color: rgb(255,213,1);
 	border: 12px solid rgb(242,203,5);
@@ -35,8 +45,8 @@ table {
 }
 
 .red {
-    width: 100px;
-    height: 100px;
+    width: 75px;
+    height: 75px;
     border-radius: 50%;
     background-color: rgb(255, 50, 1);
 	border: 12px solid rgb(220, 50, 0);

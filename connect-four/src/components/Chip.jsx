@@ -16,7 +16,7 @@ const Chip = ({ columnIndex, value, placeMove, game, winMessage }) => {
   };
 
   return (
-    <td>
+  <td>
       <div
         className="board"
         onClick={() => {
@@ -37,7 +37,7 @@ const Chip = ({ columnIndex, value, placeMove, game, winMessage }) => {
           ></div>
         )}
       </div>
-    </td>
+  </td>
   );
 };
 

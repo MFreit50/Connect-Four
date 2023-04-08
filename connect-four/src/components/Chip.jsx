@@ -9,7 +9,7 @@ const Chip = ({ columnIndex, value, placeMove, game, winMessage }) => {
   };
 
   const virtualChipStyle = {
-    top: `calc(636.5px - ${game.chipStack[columnIndex]} * (var(--board-size) - 20px))`,
+    top: `calc((5 * var(--board-size)) + 86.5 - ${game.chipStack[columnIndex]} * (var(--board-size) - 20px))`,
     transform: `translateX(calc(${columnIndex} * 60px - 50% - var(--chipSize/2)))`,
     backgroundColor: `${game.turn%2 !== 0 ? 'rgb(255,213,1)' : 'rgb(255, 50, 1)'}`,
     border: `12px solid ${game.turn%2 !== 0 ? 'rgb(242,203,5)' : 'rgb(220, 50, 0)'}`,

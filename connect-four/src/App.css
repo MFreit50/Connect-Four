@@ -2,7 +2,6 @@
 
 table {
     margin: 0 auto;
-    margin-bottom: 2em;
     border-spacing: 0px 0px;
 }
 
@@ -17,20 +16,20 @@ table {
 }
 
 :root {
---board-size: 80px;
+--board-size: 110px;
 --chip-size: calc(var(--board-size) - 35px);
 }
 
 .board {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    gap: 20px;
-	height: calc(var(--board-size) - 20px);
-	width: var(--board-size);
-    background-color: rgb(0,96,191);
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  gap: 20px;
+  height: calc(var(--board-size) - 20px);
+  width: var(--board-size);
+  background-color: rgb(0,96,191);
 }
 
 .virtualChip{
@@ -38,9 +37,11 @@ table {
 	width: var(--chip-size);
 	height: var(--chip-size);
 	border-radius: 50%;
+	padding:10px;
 	opacity: 0.5;
 	box-sizing: border-box;
 	z-index: 1;
+	
 }
 
 .white {
@@ -55,7 +56,8 @@ table {
     height: var(--chip-size);
     border-radius: 50%;
     background-color: rgb(255,213,1);
-	border: 12px solid rgb(242,203,5);
+	border: calc(var(--chip-size) * 0.16) solid rgb(237, 197, 5);
+	padding: 10px;
 	box-sizing: border-box;
 }
 
@@ -64,6 +66,7 @@ table {
     height: var(--chip-size);
     border-radius: 50%;
     background-color: rgb(255, 50, 1);
-	border: 12px solid rgb(220, 50, 0);
+	border: calc(var(--chip-size) * 0.16) solid rgb(220, 50, 0);
+	padding: 10px;
 	box-sizing: border-box;
 }

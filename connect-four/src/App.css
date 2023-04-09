@@ -1,5 +1,12 @@
 @import "https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css"; /*import Bulma CSS Framework*/
 
+.mute {
+  position: fixed;
+  top: 70%;
+  right: 5%;
+  height: 10px;
+  width: 10px;
+}
 table {
     margin: 0 auto;
     border-spacing: 0px 0px;

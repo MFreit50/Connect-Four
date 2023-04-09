@@ -1,8 +1,12 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import hoverSound from './hover-sound.mp3';
+import clickSound from './place-sound.mp3';
 
-const Chip = ({ columnIndex, value, placeMove, game, winMessage }) => {
+const Chip = ({ columnIndex, value, placeMove, game, winMessage, pressButtonValue }) => {
   const [color, setColor] = useState('white');
   const [isHovering, setIsHovering] = useState(false);
+  const hoverAudioRef = useRef(null);
+  const clickAudioRef = useRef(null);
 
   const determineColor = () => {
     return value === true ? 'yellow' : value === false ? 'red' : 'white';
@@ -15,15 +19,34 @@ const Chip = ({ columnIndex, value, placeMove, game, winMessage }) => {
     border: `calc(var(--chip-size) * 0.16) solid ${game.turn%2 !== 0 ? 'rgb(237,197,5)' : 'rgb(220, 50, 0)'}`,
   };
 
+  useEffect(() => {
+    hoverAudioRef.current = new Audio();
+    hoverAudioRef.current.src = hoverSound;
+    clickAudioRef.current = new Audio();
+    clickAudioRef.current.src = clickSound;
+  }, []);
+
+  useEffect(() => {
+    console.log(pressButtonValue);
+    if (isHovering && game.chipStack[columnIndex] < 6 && pressButtonValue === 'MUTE true') {
+      hoverAudioRef.current.play();
+    }
+  }, [isHovering, pressButtonValue]);
+
+  const handleClick = () => {
+    if (winMessage.length === 0) {
+      placeMove(columnIndex);
+      if(game.chipStack[columnIndex] < 6){
+        clickAudioRef.current.play();
+      }
+    }
+  };
+
   return (
-  <td>
+    <td>
       <div
         className="board"
-        onClick={() => {
-          if (winMessage.length === 0) {
-            placeMove(columnIndex);
-          }
-        }}
+        onClick={handleClick}
         onMouseEnter={() => setIsHovering(true)}
         onMouseLeave={() => setIsHovering(false)}
       >
@@ -37,7 +60,7 @@ const Chip = ({ columnIndex, value, placeMove, game, winMessage }) => {
           ></div>
         )}
       </div>
-  </td>
+    </td>
   );
 };
 

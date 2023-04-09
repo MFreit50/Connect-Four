@@ -1,8 +1,7 @@
 import { useState } from 'react';
 import Chip from './Chip';
 
-
-const BoardRow = ({ row, placeMove, game, winMessage }) => {
+const BoardRow = ({ row, placeMove, game, winMessage, pressButtonValue }) => {
   return (
     <tr>
       {row.map((chip, i) => (
@@ -12,10 +11,12 @@ const BoardRow = ({ row, placeMove, game, winMessage }) => {
           placeMove={placeMove}
           winMessage={winMessage}
           game={game}
+          pressButtonValue={pressButtonValue}
           key={i}
         />
       ))}
     </tr>
   );
 };
+
 export default BoardRow;

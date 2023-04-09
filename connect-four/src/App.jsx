@@ -2,8 +2,11 @@ import { useState, useEffect} from 'react'
 import './App.css'
 import BoardRow from './components/BoardRow';
 import WinningMessage from './components/WinningMessage';
+import Settings from './components/Settings';
 
 function App() {
+  const [isMuteChip, setIsMuteChip] = useState(false);
+  const [pressButtonValue, setPressButtonValue] = useState(false);
   const [message, setMessage] = useState(''); //used to keep track of player
   const [winMessage, setWinMessage] = useState('');
   const [game, setGame] = useState({
@@ -14,6 +17,10 @@ function App() {
 
   const [board, setBoard] = useState(() => fillBoard());
   const [column, setColumn] = useState();
+
+  const handlePressButton = (value) => {
+    setPressButtonValue(value);
+  }
 
   useEffect(() => {
     advanceGame();
@@ -139,20 +146,40 @@ function App() {
     return (row >= 4 || column >= 4 || diagonalRight >= 4 || diagonalLeft >= 4);
   }
 
+  const pressButton = (value) => {
+     if(value.split(' ')[0] === 'MUTE' && value.split(' ')[1] ==='true') {
+      console.log("true");
+        value = true;
+     }
+   console.log("false");
+    value = false;
+  }
+
   return (
     <div className="App">
       {winMessage ? <WinningMessage winMessage={winMessage} resetGame={resetGame}/> : null }
       <div className="section">
         <h1 className="title is-1">Connect Four</h1>
         <div className="subtitle is-5">{message}</div>
+        <Settings isMuteChip={isMuteChip} setIsMuteChip={setIsMuteChip} handlePressButton={handlePressButton} />
       </div>
       
       <table className="section borders">
         <thead>
         </thead>
         <tbody>
-           {board && board.map((row, id) => (<BoardRow row={row} placeMove={placeMove} winMessage={winMessage} game={game} key={id}/>))}
-        </tbody>
+  {board && board.map((row, id) => (
+    <BoardRow
+      row={row}
+      placeMove={placeMove}
+      winMessage={winMessage}
+      game={game}
+      key={id}
+      isMuteChip={isMuteChip}
+      pressButtonValue={pressButtonValue}
+    />
+  ))}
+</tbody>
       </table>
     </div>
   )

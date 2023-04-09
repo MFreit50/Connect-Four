@@ -1,5 +1,6 @@
 @import "https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css"; /*import Bulma CSS Framework*/
 @import "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"; /*import Font Awesome */
+
 /*Main*/
 :root {
 --board-size: 100px;
@@ -94,6 +95,7 @@ table {
 
 /*Chips*/
 .virtualChip{
+	display: flex;
 	position:absolute;
 	width: var(--chip-size);
 	height: var(--chip-size);

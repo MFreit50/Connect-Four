@@ -8,8 +8,14 @@ function Settings({ isMuteChip, setIsMuteChip, handlePressButton }) {
 
   return (
     <div className="Settings">
-      <button onClick={handleMuteClick}>
-        {isMuteChip ? 'Unmute' : 'Mute'}
+      <button 
+        className={`button is-large ${!isMuteChip ? 'is-danger' : 'is-primary'}`} 
+        onClick={handleMuteClick} id="mute-button"
+      >
+        {isMuteChip ? 
+          <i className="fa-solid fa-volume-high"></i>
+          : <i className="fa-solid fa-volume-xmark"></i>
+        }
       </button>
     </div>
   );

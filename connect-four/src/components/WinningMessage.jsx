@@ -15,10 +15,10 @@ const WinningMessage = ({winMessage, resetGame}) => {
                 <div className="box is-centered">
                 <div className="columns is-flex is-flex-direction-column">
                     <div className="column">
-                        <div className="block">{winMessage}</div>
+                        <div className="title is-2">{winMessage}</div>
                     </div>
-                    <div className="column">
-                    <button className="button is-info" onClick={resetGame}>Play again</button>
+                    <div className="column is-centered">
+                    <button className="button is-info is-medium" onClick={resetGame}>Play again</button>
                     </div>
                 </div>
             </div>

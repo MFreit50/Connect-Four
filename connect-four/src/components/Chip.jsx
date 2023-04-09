@@ -13,7 +13,7 @@ const Chip = ({ columnIndex, value, placeMove, game, winMessage, pressButtonValu
   };
 
   const virtualChipStyle = {
-    top: `calc(5 * var(--board-size) + 86.5px - ${game.chipStack[columnIndex]} * (var(--board-size) - 20px))`,
+    top: `calc(5 * var(--board-size) + 110px - ${game.chipStack[columnIndex]} * (var(--board-size) - 20px))`,
     transform: `translateX(calc(${columnIndex} * 60px - 50% - var(--chipSize/2)))`,
     backgroundColor: `${game.turn%2 !== 0 ? 'rgb(255,213,1)' : 'rgb(255, 50, 1)'}`,
     border: `calc(var(--chip-size) * 0.16) solid ${game.turn%2 !== 0 ? 'rgb(237,197,5)' : 'rgb(220, 50, 0)'}`,
@@ -24,10 +24,12 @@ const Chip = ({ columnIndex, value, placeMove, game, winMessage, pressButtonValu
     hoverAudioRef.current.src = hoverSound;
     clickAudioRef.current = new Audio();
     clickAudioRef.current.src = clickSound;
+    clickAudioRef.current.addEventListener('canplaythrough', () => {
+    clickAudioRef.current.removeEventListener('canplaythrough', null);
+    });
   }, []);
 
   useEffect(() => {
-    console.log(pressButtonValue);
     if (isHovering && game.chipStack[columnIndex] < 6 && pressButtonValue === 'MUTE true') {
       hoverAudioRef.current.play();
     }
@@ -36,7 +38,8 @@ const Chip = ({ columnIndex, value, placeMove, game, winMessage, pressButtonValu
   const handleClick = () => {
     if (winMessage.length === 0) {
       placeMove(columnIndex);
-      if(game.chipStack[columnIndex] < 6){
+      if(game.chipStack[columnIndex] < 6 && pressButtonValue === 'MUTE true'){
+        clickAudioRef.current.currentTime = 0;
         clickAudioRef.current.play();
       }
     }

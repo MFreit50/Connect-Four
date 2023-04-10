@@ -19,21 +19,13 @@ const Chip = ({ columnIndex, value, placeMove, game, winMessage, pressButtonValu
     border: `calc(var(--chip-size) * 0.16) solid ${game.turn%2 !== 0 ? 'rgb(237,197,5)' : 'rgb(220, 50, 0)'}`,
   };
 
-  /*
-    const virtualChipStyle = {
-  transform: `translate(calc(${columnIndex} * 60px - 50%), calc(5 * var(--board-size) + 110px - ${game.chipStack[columnIndex]} * (var(--board-size) - 20px)))`,
-  backgroundColor: `${game.turn%2 !== 0 ? 'rgb(255,213,1)' : 'rgb(255, 50, 1)'}`,
-  border: `calc(var(--chip-size) * 0.16) solid ${game.turn%2 !== 0 ? 'rgb(237,197,5)' : 'rgb(220, 50, 0)'}`,
-};
-*/
-
   useEffect(() => {
     hoverAudioRef.current = new Audio();
     hoverAudioRef.current.src = hoverSound;
     clickAudioRef.current = new Audio();
     clickAudioRef.current.src = clickSound;
     clickAudioRef.current.addEventListener('canplaythrough', () => {
-    clickAudioRef.current.removeEventListener('canplaythrough', null);
+      clickAudioRef.current.removeEventListener('canplaythrough', null);
     });
   }, []);
 
@@ -53,6 +45,15 @@ const Chip = ({ columnIndex, value, placeMove, game, winMessage, pressButtonValu
     }
   };
 
+  const handleHoverStart = () => {
+    setIsHovering(true);
+  };
+
+  const handleHoverEnd = () => {
+    setIsHovering(false);
+    handleClick();
+  };
+
   return (
     <td>
       <div
@@ -68,6 +69,8 @@ const Chip = ({ columnIndex, value, placeMove, game, winMessage, pressButtonValu
             style={{
               ...virtualChipStyle,
             }}
+            onTouchStart={handleHoverStart}
+            onTouchEnd={handleHoverEnd}
           ></div>
         )}
       </div>

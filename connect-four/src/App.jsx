@@ -157,7 +157,7 @@ function App() {
 
   return (
     <div className="App">
-      {winMessage ? <WinningMessage winMessage={winMessage} resetGame={resetGame}/> : null }
+      {winMessage ? <WinningMessage winMessage={winMessage} resetGame={resetGame} pressButtonValue={pressButtonValue}/> : null }
       <div className="section">
         <h1 className="title is-1">Connect Four</h1>
         <div className="subtitle is-5">{message}</div>

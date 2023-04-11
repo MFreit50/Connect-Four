@@ -1,15 +1,15 @@
 {
-  "homepage": "https://github.com/MFreit50/Connect-Four/tree/gh-pages",
+  "homepage": "https://MFreit50.github.io/Connect-Four",
   "name": "connect-four",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "dependencies": {
     "react": "^18.2.0",

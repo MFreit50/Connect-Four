@@ -1,6 +1,5 @@
 # Connect Four Website
 
-This web app: **Allows you to play connect four**
 This is a simple Connect Four interactive website that two good friends, MFreit50 and Bjon1 wrote together to explore how efficiently board game computations could be made. The logic was first implemented in Java, but then translated into JavaScript to turn it into a front-end website. Enjoy!
 
 ## Project created by:
